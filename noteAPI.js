@@ -23,14 +23,7 @@
 const apiUrl = "https://livejs-api.hexschool.io/api/livejs/v1/customer";
 const apiPath = "phy17";
 
-
-
-
-
-
-
-
-// 產品相關（客戶）
+////////////產品相關（客戶）
 /* 取得產品列表 */
 function getProductList() {
     axios
@@ -43,8 +36,9 @@ function getProductList() {
             console.log("取得產品列表", error.response.data)
         })
 }
-getProductList();
+// getProductList();
 
+////////////購物車相關(客戶)
 /* 取得購物車列表 */
 function getCartList() {
     axios
@@ -57,7 +51,7 @@ function getCartList() {
             console.log("取得購物車列表", error.response.data)
         })
 }
-getCartList();
+// getCartList();
 
 /* 加入購物車 */
 function addCartItem() {
@@ -75,7 +69,7 @@ function addCartItem() {
             console.log("加入購物車", error.response.data)
         })
 }
-addCartItem();
+// addCartItem();
 
 /* 清除購物車內全部品 */
 function deleteAllCartList() {
@@ -91,21 +85,33 @@ function deleteAllCartList() {
 // deleteAllCartList();
 
 /* 刪除購物車內特定產品 */
-axios
-    .delete(`${apiUrl}/${apiPath}/carts`, {
-        "data": {
-            "productId": "kH58gGWOsSaRaJafiygH",
-            "quantity": 10
-        }
-    })
+function deleteCartItem(){
+    axios
+        .delete(`${apiUrl}/${apiPath}/carts`, {
+            "data": {
+                "productId": "kH58gGWOsSaRaJafiygH",
+                "quantity": 10
+            }
+        })
+        .then(function (response) {
+            console.log("刪除購物車內特定產品", response.data)
+        })
+        .catch(function (error) {
+            console.log("刪除購物車內特定產品", error.response.data)
+        })
+}
 
-// 購物車相關（客戶）
-// 訂單相關（客戶）
-// 訂單相關（管理者）
+/* 編輯購物車產品數量 */
+/* 跳過 */
 
 
-
+////////////訂單相關（客戶）
 /* 送出購買訂單 */
+
+
+
+
+////////////訂單相關（管理者）
 /* 取得訂單列表 */
 /* 修改訂單狀態 */
 /* 刪除全部訂單 */
