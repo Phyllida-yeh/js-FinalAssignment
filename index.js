@@ -3,12 +3,12 @@ const apiUrl = "https://livejs-api.hexschool.io/api/livejs/v1/customer";
 const apiPath = "phy17";
 
 // 產品區塊
-// [ v ] 瀏覽產品列表
-// [ v ] 篩選產品
-// [  ] 加入購物車：將事件綁定在整個產品列表上，提升效能
+// [ v ] 1瀏覽產品列表
+// [ v ] 2篩選產品
+// [  ] 3加入購物車：將事件綁定在整個產品列表上，提升效能
 
 
-/* 取得產品列表 */
+/* 1-1取得產品列表 */
 function getProductList() {
     axios
         .get(`${apiUrl}/${apiPath}/products`
@@ -17,15 +17,16 @@ function getProductList() {
             // console.log("取得產品列表", response.data.products)
             productList = response.data.products;
             renderProducts(productList);
-            console.log("變數productList", productList);
+            // console.log("變數productList", productList);
         })
         .catch(function (error) {
             console.log("取得產品列表發生錯誤", error.message);
+            console.log("取得產品列表發生錯誤", error.response.data.message);
         })
 }
 getProductList();
 
-/* 渲染取得的產品列表 */
+/* 1-2.渲染取得的產品列表 */
 const productWrap = document.querySelector(".productWrap");
 function renderProducts(inputProductList) {
     let productListHtml = "";
@@ -43,11 +44,10 @@ function renderProducts(inputProductList) {
     productWrap.innerHTML = productListHtml;
 }
 
-/* 取得篩選類別 */
-/* 篩選類別==產品類別 */
-/* 渲染篩選的產品 */
+/* 2-1取得篩選類別 */
+/* 2-2篩選類別==產品類別 */
+/* 2-3渲染篩選的產品 */
 const productSelect = document.querySelector(".productSelect");
-
 productSelect.addEventListener("change", function () {
 
     if (productSelect.value == "全部") {
@@ -67,17 +67,67 @@ productSelect.addEventListener("change", function () {
     }
 })
 
-
-
+/* 3-1 */
 
 
 
 // 購物車區塊
 //  確認購物車列表
-//   [  ] 瀏覽購物車內容
+//   [ v ] 4瀏覽購物車內容
 //  編輯 / 刪除購物車
-//   [  ] 刪除單一商品
-//   [  ] 刪除所有品項
+//   [  ] 5刪除單一商品
+//   [  ] 6刪除所有品項
+
+
+/* 4-1取得購物車列表 */
+let finalTotal=0;
+function getCartList() {
+    axios
+        .get(`${apiUrl}/${apiPath}/carts`
+        )
+        .then(function (response) {
+            // console.log("取得購物車列表", response.data)
+            cartList = response.data.carts;
+            // console.log("變數cartList", cartList);
+            finalTotal=response.data.finalTotal
+            renderShoppingCart(cartList)
+        })
+        .catch(function (error) {
+            console.log("取得購物車列表", error.response.data)
+        })
+}
+getCartList();
+
+/* 4-2渲染購物車列表 */
+const shoppingCartTableBody = document.querySelector(".shoppingCart-table tbody");
+const shoppingCartFinalTotal= document.querySelector(".total");
+function renderShoppingCart(inputCartList) {
+    // console.log("inputCartList", inputCartList);
+    let cartListHtml = "";
+    inputCartList.forEach(function (inputCart) {
+        cartListHtml += `
+        <tbody>
+          <tr>
+              <td>
+                  <div class="cardItem-title">
+                      <img src="${inputCart.product.images}" alt="">
+                      <p>${inputCart.product.title}</p>
+                  </div>
+              </td>
+              <td>NT$${inputCart.product.origin_price}</td>
+              <td>${inputCart.quantity}</td>
+              <td>NT$${inputCart.product.price}</td>
+              <td class="discardBtn">
+                  <a href="#" class="material-icons">
+                      clear
+                  </a>
+              </td>
+          </tr>
+        </tbody>`
+    })
+    shoppingCartTableBody.innerHTML = cartListHtml;
+    shoppingCartFinalTotal.textContent= `NT$${finalTotal}`;
+}
 
 // 訂單區塊
 //  驗證內容：先在前端進行驗證，通過後再送出訂單，減少資源耗費
