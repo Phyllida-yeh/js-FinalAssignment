@@ -5,7 +5,7 @@ const apiPath = "phy17";
 // 產品區塊
 // [ v ] 1瀏覽產品列表
 // [ v ] 2篩選產品
-// [  ] 3加入購物車：將事件綁定在整個產品列表上，提升效能
+// [ v ] 3加入購物車：將事件綁定在整個產品列表上，提升效能
 
 
 /* 1-1取得產品列表 */
@@ -35,8 +35,8 @@ function renderProducts(inputProductList) {
         <li class="productCard">
             <h4 class="productType">新品</h4>
             <img src="${inputProduct.images}"alt="">
-            <a href="#" class="addCardBtn">加入購物車</a>
-            <h3>Antony 雙人床架／雙人加大${inputProduct.title}</h3>
+            <a href="#" class="addCardBtn" data-id=${inputProduct.id}>加入購物車</a>
+            <h3>${inputProduct.title}</h3>
             <del class="originPrice">NT${inputProduct.price}</del>
             <p class="nowPrice">NT$${inputProduct.origin_price}</p>
         </li>`
@@ -67,7 +67,35 @@ productSelect.addEventListener("change", function () {
     }
 })
 
-/* 3-1 */
+/* 3-1監聽產品列表 */
+/* 3-2取得產品ID */
+/* 3-3執行加入購物車 */
+productWrap.addEventListener("click",function(event){
+    console.log(event.target.dataset.id);
+    const id=event.target.dataset.id;
+    if(id){
+        addCart(id);
+    }
+    event.preventDefault();
+})
+function addCart(productId) {
+    const data = {
+        "data": {
+            "productId": productId,
+            "quantity": 1
+        }
+    }; 
+    axios
+        .post(`${apiUrl}/${apiPath}/carts`,data)
+        .then(function (response) {
+            console.log(response.data)
+        })
+        .catch(function (error) {
+            console.log("加入購物車發生錯誤", error.message);
+            console.log("加入購物車發生錯誤", error.response.data.message);
+        })
+
+}
 
 
 
@@ -80,7 +108,7 @@ productSelect.addEventListener("change", function () {
 
 
 /* 4-1取得購物車列表 */
-let finalTotal=0;
+let finalTotal = 0;
 function getCartList() {
     axios
         .get(`${apiUrl}/${apiPath}/carts`
@@ -89,7 +117,7 @@ function getCartList() {
             // console.log("取得購物車列表", response.data)
             cartList = response.data.carts;
             // console.log("變數cartList", cartList);
-            finalTotal=response.data.finalTotal
+            finalTotal = response.data.finalTotal
             renderShoppingCart(cartList)
         })
         .catch(function (error) {
@@ -100,7 +128,7 @@ getCartList();
 
 /* 4-2渲染購物車列表 */
 const shoppingCartTableBody = document.querySelector(".shoppingCart-table tbody");
-const shoppingCartFinalTotal= document.querySelector(".total");
+const shoppingCartFinalTotal = document.querySelector(".total");
 function renderShoppingCart(inputCartList) {
     // console.log("inputCartList", inputCartList);
     let cartListHtml = "";
@@ -126,7 +154,7 @@ function renderShoppingCart(inputCartList) {
         </tbody>`
     })
     shoppingCartTableBody.innerHTML = cartListHtml;
-    shoppingCartFinalTotal.textContent= `NT$${finalTotal}`;
+    shoppingCartFinalTotal.textContent = `NT$${finalTotal}`;
 }
 
 // 訂單區塊
