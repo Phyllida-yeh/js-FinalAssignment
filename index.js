@@ -7,7 +7,6 @@ const apiPath = "phy17";
 // [ v ] 2篩選產品
 // [ v ] 3加入購物車：將事件綁定在整個產品列表上，提升效能
 
-
 /* 1-1取得產品列表 */
 function getProductList() {
     axios
@@ -124,7 +123,8 @@ function getCartList() {
             renderShoppingCart(cartList)
         })
         .catch(function (error) {
-            console.log("取得購物車列表發生錯誤", error.response.data)
+            // console.log("取得購物車列表發生錯誤", error.response.data)
+            console.log("取得購物車列表發生錯誤", error)
         })
 }
 getCartList();
@@ -158,6 +158,14 @@ function renderShoppingCart(inputCartList) {
     })
     shoppingCartTableBody.innerHTML = cartListHtml;
     shoppingCartFinalTotal.textContent = `NT$${finalTotal}`;
+    /* 7-1 */
+    if (!cartList.length) {
+        orderInfoBtn.disabled = true;  // 禁用
+        console.log("購物車裡沒有東西無法送出");
+    } else {
+        orderInfoBtn.disabled = false; // 啟用
+    }
+
 }
 
 /* 5-1監聽叉叉按鈕取得ID */
@@ -210,9 +218,11 @@ discardAllBtn.addEventListener("click", function (event) {
 //  驗證內容：先在前端進行驗證，通過後再送出訂單，減少資源耗費
 //   [  ] 7檢查購物車有無商品
 //   [  ] 8檢查表單欄位是否有填寫
-//   [  ] 9送出訂單
+//   [ v ] 9送出訂單
 //   [  ] 10送出後清空表單
 
+/* 7-1沒有商品就不能送出 */
+/* 在4-2渲染購物車列表處理 */
 
 /* 9-1監聽刪除全部的按鈕 */
 /* 9-1組合要發送的資料 */
