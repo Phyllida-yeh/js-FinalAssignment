@@ -216,16 +216,14 @@ discardAllBtn.addEventListener("click", function (event) {
 
 // 訂單區塊
 //  驗證內容：先在前端進行驗證，通過後再送出訂單，減少資源耗費
-//   [  ] 7檢查購物車有無商品
-//   [  ] 8檢查表單欄位是否有填寫
+//   [ v ] 7檢查購物車有無商品
+//   [ v ] 8檢查表單欄位是否有填寫
 //   [ v ] 9送出訂單
-//   [  ] 10送出後清空表單
+//   [ v ] 10送出後清空表單
 
-/* 7-1沒有商品就不能送出 */
-/* 在4-2渲染購物車列表處理 */
 
-/* 9-1監聽刪除全部的按鈕 */
-/* 9-1組合要發送的資料 */
+/* 0-1監聽刪除全部的按鈕 */
+/* 0-1組合要發送的資料 */
 const orderInfoBtn = document.querySelector(".orderInfo-btn");
 
 const customerName = document.querySelector("#customerName");
@@ -234,24 +232,79 @@ const customerEmail = document.querySelector("#customerEmail");
 const customerAddress = document.querySelector("#customerAddress");
 const tradeWay = document.querySelector("#tradeWay");
 
+/* 7-1沒有商品就不能送出 */
+/* 在4-2渲染購物車列表處理 */
+
 orderInfoBtn.addEventListener("click", function (event) {
     event.preventDefault();
+
     const name = customerName.value.trim();
     const phone = customerPhone.value.trim();
     const email = customerEmail.value.trim();
     const address = customerAddress.value.trim();
     const payment = tradeWay.value;
-    const orderFromData = {
-        "data": {
-            "user": {
-                "name": name,
-                "tel": phone,
-                "email": email,
-                "address": address,
-                "payment": payment
+
+    customerName.nextElementSibling.style.display = "none";
+    customerPhone.nextElementSibling.style.display = "none";
+    customerEmail.nextElementSibling.style.display = "none";
+    customerAddress.nextElementSibling.style.display = "none";
+
+    /* 8-1檢查表單欄位 */
+    let isEmpty = false;
+    if (!name) {
+        console.log("請輸入姓名");
+        customerName.nextElementSibling.style.display = "block";
+        isEmpty = true;
+    }
+    if (!phone) {
+        console.log("請輸入電話");
+        customerPhone.nextElementSibling.style.display = "block";
+        isEmpty = true;
+    }
+    if (!email) {
+        console.log("請輸入郵件");
+        customerEmail.nextElementSibling.style.display = "block";
+        isEmpty = true;
+    }
+    if (!address) {
+        console.log("請輸入地址");
+        customerAddress.nextElementSibling.style.display = "block";
+        isEmpty = true;
+    }
+    if (isEmpty === false) {
+        const orderFromData = {
+            "data": {
+                "user": {
+                    "name": name,
+                    "tel": phone,
+                    "email": email,
+                    "address": address,
+                    "payment": payment
+                }
             }
         }
+        console.log("成功送出表單資料");
+        creatOrder(orderFromData);
     }
-
-    console.log(orderFromData);
 })
+
+
+const orderInfoForm=document.querySelector(".orderInfo-form");
+/* 9-1送出表單 */
+function creatOrder(orderFromData) {
+    axios
+        .post(`${apiUrl}/${apiPath}/orders`, orderFromData
+        )
+        .then(function (response) {
+            console.log("送出訂單成功", response.data);
+            console.log(orderFromData);
+            /* 10-1送出後清空表單 */
+            orderInfoForm.reset();
+            getCartList();
+
+        })
+        .catch(function (error) {
+            console.log("送出訂單失敗", error.response.data)
+        })
+}
+

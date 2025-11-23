@@ -85,7 +85,7 @@ function deleteAllCartList() {
 // deleteAllCartList();
 
 /* 刪除購物車內特定產品 */
-function deleteCartItem(){
+function deleteCartItem() {
     axios
         .delete(`${apiUrl}/${apiPath}/carts`, {
             "data": {
@@ -108,7 +108,19 @@ function deleteCartItem(){
 ////////////訂單相關（客戶）
 /* 送出購買訂單 */
 
+function creatOrder(orderFromData) {
+    axios
+        .post(`${apiUrl}/${apiPath}/orders`,orderFromData
+        )
+        .then(function (response) {
+            console.log("送出訂單成功", response.data);
+            console.log(orderFromData);
 
+        })
+        .catch(function (error) {
+            console.log("送出訂單失敗", error.response.data)
+        })
+}
 
 
 ////////////訂單相關（管理者）
