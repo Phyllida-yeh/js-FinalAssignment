@@ -106,7 +106,7 @@ function addCart(productId) {
 //  確認購物車列表
 //   [ v ] 4瀏覽購物車內容
 //  編輯 / 刪除購物車
-//   [  ] 5刪除單一商品
+//   [ v ] 5刪除單一商品
 //   [ v ] 6刪除所有品項
 
 
@@ -188,7 +188,7 @@ function deleteCartItem(inputCartID) {
 }
 
 
-/* 6-1取得刪除全部的按鈕 */
+/* 6-1監聽刪除全部的按鈕 */
 /* 6-2執行刪除全部ＡＰＩ */
 const discardAllBtn = document.querySelector(".discardAllBtn");
 discardAllBtn.addEventListener("click", function (event) {
@@ -206,11 +206,42 @@ discardAllBtn.addEventListener("click", function (event) {
 
 })
 
-
-
 // 訂單區塊
 //  驗證內容：先在前端進行驗證，通過後再送出訂單，減少資源耗費
-//   [  ] 檢查購物車有無商品
-//   [  ] 檢查表單欄位是否有填寫
-//   [  ] 送出訂單
-//   [  ] 送出後清空表單
+//   [  ] 7檢查購物車有無商品
+//   [  ] 8檢查表單欄位是否有填寫
+//   [  ] 9送出訂單
+//   [  ] 10送出後清空表單
+
+
+/* 9-1監聽刪除全部的按鈕 */
+/* 9-1組合要發送的資料 */
+const orderInfoBtn = document.querySelector(".orderInfo-btn");
+
+const customerName = document.querySelector("#customerName");
+const customerPhone = document.querySelector("#customerPhone");
+const customerEmail = document.querySelector("#customerEmail");
+const customerAddress = document.querySelector("#customerAddress");
+const tradeWay = document.querySelector("#tradeWay");
+
+orderInfoBtn.addEventListener("click", function (event) {
+    event.preventDefault();
+    const name = customerName.value.trim();
+    const phone = customerPhone.value.trim();
+    const email = customerEmail.value.trim();
+    const address = customerAddress.value.trim();
+    const payment = tradeWay.value;
+    const orderFromData = {
+        "data": {
+            "user": {
+                "name": name,
+                "tel": phone,
+                "email": email,
+                "address": address,
+                "payment": payment
+            }
+        }
+    }
+
+    console.log(orderFromData);
+})
