@@ -70,10 +70,10 @@ productSelect.addEventListener("change", function () {
 /* 3-1監聽產品列表 */
 /* 3-2取得產品ID */
 /* 3-3執行加入購物車 */
-productWrap.addEventListener("click",function(event){
+productWrap.addEventListener("click", function (event) {
     console.log(event.target.dataset.id);
-    const id=event.target.dataset.id;
-    if(id){
+    const id = event.target.dataset.id;
+    if (id) {
         addCart(id);
     }
     event.preventDefault();
@@ -84,11 +84,16 @@ function addCart(productId) {
             "productId": productId,
             "quantity": 1
         }
-    }; 
+    };
     axios
-        .post(`${apiUrl}/${apiPath}/carts`,data)
+        .post(`${apiUrl}/${apiPath}/carts`, data)
         .then(function (response) {
-            console.log(response.data)
+            /* ？ */
+            // newCartList=response.data.carts;
+            // finalTotal=response.data.finalTotal;
+            getCartList();
+            console.log("加入購物車成功", response.data);
+
         })
         .catch(function (error) {
             console.log("加入購物車發生錯誤", error.message);
@@ -97,14 +102,12 @@ function addCart(productId) {
 
 }
 
-
-
 // 購物車區塊
 //  確認購物車列表
 //   [ v ] 4瀏覽購物車內容
 //  編輯 / 刪除購物車
 //   [  ] 5刪除單一商品
-//   [  ] 6刪除所有品項
+//   [ v ] 6刪除所有品項
 
 
 /* 4-1取得購物車列表 */
@@ -121,7 +124,7 @@ function getCartList() {
             renderShoppingCart(cartList)
         })
         .catch(function (error) {
-            console.log("取得購物車列表", error.response.data)
+            console.log("取得購物車列表發生錯誤", error.response.data)
         })
 }
 getCartList();
@@ -156,6 +159,26 @@ function renderShoppingCart(inputCartList) {
     shoppingCartTableBody.innerHTML = cartListHtml;
     shoppingCartFinalTotal.textContent = `NT$${finalTotal}`;
 }
+
+
+/* 6-1取得刪除全部的按鈕 */
+/* 6-2執行刪除全部ＡＰＩ */
+const discardAllBtn = document.querySelector(".discardAllBtn");
+discardAllBtn.addEventListener("click", function (event) {
+    event.preventDefault();
+    console.log("discardAllBtn");
+    axios
+        .delete(`${apiUrl}/${apiPath}/carts`)
+        .then(function (response) {
+            console.log("清除購物車內全部品成功", response.data)
+        })
+        .catch(function (error) {
+            console.log("清除購物車內全部品發生錯誤", error.response.data)
+        })
+        getCartList();
+})
+
+
 
 // 訂單區塊
 //  驗證內容：先在前端進行驗證，通過後再送出訂單，減少資源耗費
