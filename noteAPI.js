@@ -97,7 +97,7 @@ function deleteCartItem(){
             console.log("刪除購物車內特定產品", response.data)
         })
         .catch(function (error) {
-            console.log("刪除購物車內特定產品", error.response.data)
+            console.log("刪除購物車內特定產品失敗", error.response.data)
         })
 }
 

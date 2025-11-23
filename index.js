@@ -149,7 +149,7 @@ function renderShoppingCart(inputCartList) {
               <td>${inputCart.quantity}</td>
               <td>NT$${inputCart.product.price}</td>
               <td class="discardBtn">
-                  <a href="#" class="material-icons">
+                  <a href="#" class="material-icons" data-id="${inputCart.id}">
                       clear
                   </a>
               </td>
@@ -158,6 +158,33 @@ function renderShoppingCart(inputCartList) {
     })
     shoppingCartTableBody.innerHTML = cartListHtml;
     shoppingCartFinalTotal.textContent = `NT$${finalTotal}`;
+}
+
+/* 5-1監聽叉叉按鈕取得ID */
+shoppingCartTableBody.addEventListener("click", function (event) {
+    // console.log(event.target);
+    const cartId = event.target.dataset.id;
+    if (cartId) {
+        deleteCartItem(cartId);
+        // console.log("執行刪除品項");
+        // console.log(cartId);
+    };
+    event.preventDefault();
+
+})
+
+/* 5-2組合ID執行API */
+function deleteCartItem(inputCartID) {
+    axios
+        .delete(`${apiUrl}/${apiPath}/carts/${inputCartID}`, {
+        })
+        .then(function (response) {
+            console.log("刪除購物車內特定產品成功", response.data)
+            getCartList();
+        })
+        .catch(function (error) {
+            console.log("刪除購物車內特定產品失敗", error.response.data)
+        })
 }
 
 
@@ -171,11 +198,12 @@ discardAllBtn.addEventListener("click", function (event) {
         .delete(`${apiUrl}/${apiPath}/carts`)
         .then(function (response) {
             console.log("清除購物車內全部品成功", response.data)
+            getCartList();
         })
         .catch(function (error) {
             console.log("清除購物車內全部品發生錯誤", error.response.data)
         })
-        getCartList();
+
 })
 
 
