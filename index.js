@@ -54,15 +54,15 @@ productSelect.addEventListener("change", function () {
         renderProducts(productList)
 
     } else {
-        let fliterProduct = [];
+        let filterProduct = [];
         productList.forEach(function (product) {
             // console.log(product.title);
             if (productSelect.value == product.category) {
-                fliterProduct.push(product)
+                filterProduct.push(product)
             }
         })
-        // console.log(fliterProduct);
-        renderProducts(fliterProduct)
+        // console.log(filterProduct);
+        renderProducts(filterProduct)
     }
 })
 
@@ -137,7 +137,6 @@ function renderShoppingCart(inputCartList) {
     let cartListHtml = "";
     inputCartList.forEach(function (inputCart) {
         cartListHtml += `
-        <tbody>
           <tr>
               <td>
                   <div class="cardItem-title">
@@ -154,7 +153,7 @@ function renderShoppingCart(inputCartList) {
                   </a>
               </td>
           </tr>
-        </tbody>`
+        `
     })
     shoppingCartTableBody.innerHTML = cartListHtml;
     shoppingCartFinalTotal.textContent = `NT$${finalTotal}`;
@@ -194,7 +193,6 @@ function deleteCartItem(inputCartID) {
             console.log("刪除購物車內特定產品失敗", error.response.data)
         })
 }
-
 
 /* 6-1監聽刪除全部的按鈕 */
 /* 6-2執行刪除全部ＡＰＩ */
@@ -272,7 +270,7 @@ orderInfoBtn.addEventListener("click", function (event) {
         isEmpty = true;
     }
     if (isEmpty === false) {
-        const orderFromData = {
+        const orderFormData = {
             "data": {
                 "user": {
                     "name": name,
@@ -284,20 +282,20 @@ orderInfoBtn.addEventListener("click", function (event) {
             }
         }
         console.log("成功送出表單資料");
-        creatOrder(orderFromData);
+        createOrder(orderFormData);
     }
 })
 
 
-const orderInfoForm=document.querySelector(".orderInfo-form");
+const orderInfoForm = document.querySelector(".orderInfo-form");
 /* 9-1送出表單 */
-function creatOrder(orderFromData) {
+function createOrder(orderFormData) {
     axios
-        .post(`${apiUrl}/${apiPath}/orders`, orderFromData
+        .post(`${apiUrl}/${apiPath}/orders`, orderFormData
         )
         .then(function (response) {
             console.log("送出訂單成功", response.data);
-            console.log(orderFromData);
+            console.log(orderFormData);
             /* 10-1送出後清空表單 */
             orderInfoForm.reset();
             getCartList();
