@@ -29,37 +29,44 @@ function getOrders() {
 }
 getOrders();
 
+/* 處理品項字串 */
+function showProductTitle(cartArray) {
+    let str = "";
+    cartArray.forEach(function (item, index) {
+        str += `<p>${index + 1}. ${item.title}</p>`;
+    });
+    return str;
+}
+/* 轉換日期格式 */
+function transformData(inputTime){
+    const date=new Date(inputTime*1000);
+    const year=date.getFullYear();
+    const month=date.getMonth();
+    const day=date.getDate();
+
+    return`${year}/${month}/${day}`;
+}
+
 /* 選染取得的訂單列表 */
 const orderPageTable = document.querySelector(".orderPage-table tbody");
-
 function renderOrders() {
     let orderListHtml = "";
-
-    /* 處理品項字串 */
-    function showProductTitle(cartArray) {
-        let str = "";
-        cartArray.forEach(function (item, index) {
-            str += `<p>${index + 1}. ${item.title}</p>`;
-        });
-        return str;
-    }
-
     orderList.forEach(function (ordersItem) {
         let productStr = showProductTitle(ordersItem.products);
-
+        let orderAt=transformData(ordersItem.createdAt);
         orderListHtml += `
             <tr>
                 <td>${ordersItem.id}</td>
                 <td>
                     <p>${ordersItem.user.name}</p>
-                    <p>${ordersItem.user.name}</p>
+                    <p>${ordersItem.user.tel}</p>
                 </td>
                 <td>${ordersItem.user.address}</td>
                 <td>${ordersItem.user.email}</td>
                 <td>
                     ${productStr}
                 </td>
-                <td>${ordersItem.createdAt}</td>
+                <td>${orderAt}</td>
                 <td class="orderStatus">
                     <a href="#">未處理</a>
                 </td>
@@ -69,7 +76,5 @@ function renderOrders() {
             </tr>
             `
     })
-
     orderPageTable.innerHTML = orderListHtml;
-
 }
