@@ -19,7 +19,7 @@ function getOrders() {
         .then(function (response) {
             // console.log(response.data);
             orderList = response.data.orders;
-            console.log(orderList);
+            // console.log(orderList);
             renderOrders();
         })
         .catch(function (error) {
@@ -29,7 +29,9 @@ function getOrders() {
 }
 getOrders();
 
-/* 處理品項字串 */
+
+/* 選染取得的訂單列表 */
+/* 0-1處理品項字串 */
 function showProductTitle(cartArray) {
     let str = "";
     cartArray.forEach(function (item, index) {
@@ -37,23 +39,23 @@ function showProductTitle(cartArray) {
     });
     return str;
 }
-/* 轉換日期格式 */
-function transformData(inputTime){
-    const date=new Date(inputTime*1000);
-    const year=date.getFullYear();
-    const month=date.getMonth();
-    const day=date.getDate();
+/* 0-2轉換日期格式 */
+function transformData(inputTime) {
+    const date = new Date(inputTime * 1000);
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
 
-    return`${year}/${month}/${day}`;
+    return `${year}/${month}/${day}`;
 }
 
-/* 選染取得的訂單列表 */
+/* 1-1渲染訂單 */
 const orderPageTable = document.querySelector(".orderPage-table tbody");
 function renderOrders() {
     let orderListHtml = "";
     orderList.forEach(function (ordersItem) {
         let productStr = showProductTitle(ordersItem.products);
-        let orderAt=transformData(ordersItem.createdAt);
+        let orderAt = transformData(ordersItem.createdAt);
         orderListHtml += `
             <tr>
                 <td>${ordersItem.id}</td>
@@ -71,10 +73,63 @@ function renderOrders() {
                     <a href="#">未處理</a>
                 </td>
                 <td>
-                    <input type="button" class="delSingleOrder-Btn" value="刪除">
+                    <input type="button" class="delSingleOrder-Btn" value="刪除" data-id="${ordersItem.id}">
                 </td>
             </tr>
             `
     })
     orderPageTable.innerHTML = orderListHtml;
+    /* 2-2 */
+    if (!orderList.length) {
+        discardAllBtn.disabled = true; //禁用
+        console.log("當前沒有訂單");
+    } else {
+        discardAllBtn.disabled = false; //啟用
+    }
 }
+
+/* 2刪除 */
+/* 2-0取得按鈕 */
+const discardAllBtn = document.querySelector(".discardAllBtn");
+const orderPageTableTbody = document.querySelector(".orderPage-table tbody");
+
+/* 2-0監聽按鈕 */
+discardAllBtn.addEventListener("click", function (event) {
+    console.log(event.target);
+    deleteAllOrder();
+});
+orderPageTableTbody.addEventListener("click", function (event) {
+    const orderId = event.target.dataset.id;
+    if (orderId) {
+        deleteThisOrder(orderId);
+    }
+})
+
+function deleteThisOrder(InputOrderId) {
+    axios
+        .delete(`${ordersApiUrl}/${InputOrderId}`, config)
+        .then(function (response) {
+            console.log("成功刪除這筆訂單");
+            getOrders();
+        })
+        .catch(function (error) {
+            console.log(error);
+            console.log(`刪除這筆訂單失敗`);
+        })
+};
+
+/* 2-1刪除全部訂單 */
+function deleteAllOrder() {
+    axios
+        .delete(ordersApiUrl, config)
+        .then(function (response) {
+            console.log(`成功刪除全部訂單`);
+            getOrders();
+        })
+        .catch(function (error) {
+            console.log(error);
+            console.log(`刪除全部訂單失敗`);
+        })
+}
+/* 2-2如果沒有訂單就不送出刪除請求（1-1） */
+/* 2-3刪除個別訂單 */
