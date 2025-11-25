@@ -8,6 +8,9 @@ const apiPath = "phy17";
 // [ v ] 3加入購物車：將事件綁定在整個產品列表上，提升效能
 
 /* 1-1取得產品列表 */
+let productList = [];
+let cartList = [];
+
 function getProductList() {
     axios
         .get(`${apiUrl}/${apiPath}/products`
@@ -160,6 +163,7 @@ function renderShoppingCart(inputCartList) {
     /* 7-1 */
     if (!cartList.length) {
         orderInfoBtn.disabled = true;  // 禁用
+        
         console.log("購物車裡沒有東西無法送出");
     } else {
         orderInfoBtn.disabled = false; // 啟用
