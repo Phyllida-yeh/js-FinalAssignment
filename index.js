@@ -73,7 +73,7 @@ productSelect.addEventListener("change", function () {
 /* 3-2取得產品ID */
 /* 3-3執行加入購物車 */
 productWrap.addEventListener("click", function (event) {
-    console.log(event.target.dataset.id);
+    // console.log(event.target.dataset.id);
     const id = event.target.dataset.id;
     if (id) {
         addCart(id);
@@ -94,7 +94,8 @@ function addCart(productId) {
             // newCartList=response.data.carts;
             // finalTotal=response.data.finalTotal;
             getCartList();
-            console.log("加入購物車成功", response.data);
+            console.log("加入購物車成功");
+            // console.log("加入購物車成功", response.data);
 
         })
         .catch(function (error) {
@@ -163,7 +164,6 @@ function renderShoppingCart(inputCartList) {
     /* 7-1 */
     if (!cartList.length) {
         orderInfoBtn.disabled = true;  // 禁用
-        
         console.log("購物車裡沒有東西無法送出");
     } else {
         orderInfoBtn.disabled = false; // 啟用
@@ -190,7 +190,8 @@ function deleteCartItem(inputCartID) {
         .delete(`${apiUrl}/${apiPath}/carts/${inputCartID}`, {
         })
         .then(function (response) {
-            console.log("刪除購物車內特定產品成功", response.data)
+            console.log("刪除購物車內特定產品成功")
+            // console.log("刪除購物車內特定產品成功", response.data)
             getCartList();
         })
         .catch(function (error) {
@@ -203,15 +204,16 @@ function deleteCartItem(inputCartID) {
 const discardAllBtn = document.querySelector(".discardAllBtn");
 discardAllBtn.addEventListener("click", function (event) {
     event.preventDefault();
-    console.log("discardAllBtn");
+    // console.log("discardAllBtn");
     axios
         .delete(`${apiUrl}/${apiPath}/carts`)
         .then(function (response) {
-            console.log("清除購物車內全部品成功", response.data)
+            console.log("清除購物車內全部品成功");
+            // console.log("清除購物車內全部品成功", response.data);
             getCartList();
         })
         .catch(function (error) {
-            console.log("清除購物車內全部品發生錯誤", error.response.data)
+            console.log("清除購物車內全部品發生錯誤", error.response.data);
         })
 
 })
@@ -298,8 +300,9 @@ function createOrder(orderFormData) {
         .post(`${apiUrl}/${apiPath}/orders`, orderFormData
         )
         .then(function (response) {
-            console.log("送出訂單成功", response.data);
-            console.log(orderFormData);
+            console.log("送出訂單成功");
+            // console.log("送出訂單成功", response.data);
+            // console.log(orderFormData);
             /* 10-1送出後清空表單 */
             orderInfoForm.reset();
             getCartList();
