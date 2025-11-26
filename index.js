@@ -87,18 +87,21 @@ function addCart(productId) {
             "quantity": 1
         }
     };
+    showLoading("加入購物車中...");
     axios
         .post(`${apiUrl}/${apiPath}/carts`, data)
         .then(function (response) {
             /* ？ */
             // newCartList=response.data.carts;
             // finalTotal=response.data.finalTotal;
+            hideLoading();
             getCartList();
-            console.log("加入購物車成功");
+            // console.log("加入購物車成功");
             // console.log("加入購物車成功", response.data);
 
         })
         .catch(function (error) {
+            hideLoading();
             console.log("加入購物車發生錯誤", error.message);
             console.log("加入購物車發生錯誤", error.response.data.message);
         })
@@ -186,15 +189,18 @@ shoppingCartTableBody.addEventListener("click", function (event) {
 
 /* 5-2組合ID執行API */
 function deleteCartItem(inputCartID) {
+    showLoading("刪除中...");
     axios
         .delete(`${apiUrl}/${apiPath}/carts/${inputCartID}`, {
         })
         .then(function (response) {
-            console.log("刪除購物車內特定產品成功")
+            // console.log("刪除購物車內特定產品成功")
             // console.log("刪除購物車內特定產品成功", response.data)
+            hideLoading();
             getCartList();
         })
         .catch(function (error) {
+            hideLoading();
             console.log("刪除購物車內特定產品失敗", error.response.data)
         })
 }
@@ -204,15 +210,17 @@ function deleteCartItem(inputCartID) {
 const discardAllBtn = document.querySelector(".discardAllBtn");
 discardAllBtn.addEventListener("click", function (event) {
     event.preventDefault();
-    // console.log("discardAllBtn");
+    showLoading("刪除購物車");
     axios
         .delete(`${apiUrl}/${apiPath}/carts`)
         .then(function (response) {
-            console.log("清除購物車內全部品成功");
+            // console.log("清除購物車內全部品成功");
             // console.log("清除購物車內全部品成功", response.data);
+            hideLoading();
             getCartList();
         })
         .catch(function (error) {
+            hideLoading();
             console.log("清除購物車內全部品發生錯誤", error.response.data);
         })
 
@@ -296,20 +304,41 @@ orderInfoBtn.addEventListener("click", function (event) {
 const orderInfoForm = document.querySelector(".orderInfo-form");
 /* 9-1送出表單 */
 function createOrder(orderFormData) {
+    showLoading("送出表單");
     axios
         .post(`${apiUrl}/${apiPath}/orders`, orderFormData
         )
         .then(function (response) {
-            console.log("送出訂單成功");
             // console.log("送出訂單成功", response.data);
             // console.log(orderFormData);
+            hideLoading();
             /* 10-1送出後清空表單 */
             orderInfoForm.reset();
             getCartList();
 
         })
         .catch(function (error) {
+            hideLoading();
             console.log("送出訂單失敗", error.response.data)
         })
 }
 
+
+
+/* 遮罩提示 */
+const loadingCover = document.querySelector(".loadingCover");
+const loadingTitle = document.querySelector(".loadingTitle");
+
+/* 執行遮罩 */
+function showLoading(text = "載入中...") {
+  setLoadingText(text); // 這裡一定會有字，所以直接設定
+  loadingCover.classList.remove("hidden");
+}
+/* 結束遮罩 */
+function hideLoading() {
+  loadingCover.classList.add("hidden");
+}
+/* 賦值 */
+function setLoadingText(text) {
+  loadingTitle.textContent = text;
+}
