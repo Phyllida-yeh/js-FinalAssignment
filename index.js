@@ -140,34 +140,43 @@ getCartList();
 const shoppingCartTableBody = document.querySelector(".shoppingCart-table tbody");
 const shoppingCartFinalTotal = document.querySelector(".total");
 function renderShoppingCart(inputCartList) {
-    // console.log("inputCartList", inputCartList);
     let cartListHtml = "";
-    inputCartList.forEach(function (inputCart) {
-        cartListHtml += `
-          <tr>
-              <td>
-                  <div class="cardItem-title">
-                      <img src="${inputCart.product.images}" alt="">
-                      <p>${inputCart.product.title}</p>
-                  </div>
-              </td>
-              <td>NT$${inputCart.product.origin_price}</td>
-              <td>${inputCart.quantity}</td>
-              <td>NT$${inputCart.product.price}</td>
-              <td class="discardBtn">
-                  <a href="#" class="material-icons" data-id="${inputCart.id}">
-                      clear
-                  </a>
-              </td>
-          </tr>
+    if (!inputCartList.length) {
+        cartListHtml = `
+        <tr>
+            <td colspan="5" class="emptyCartMessage">
+                購物車內沒有東西
+            </td>
+        </tr>
         `
-    })
+    } else {
+        inputCartList.forEach(function (inputCart) {
+            cartListHtml += `
+              <tr>
+                  <td>
+                      <div class="cardItem-title">
+                          <img src="${inputCart.product.images}" alt="">
+                          <p>${inputCart.product.title}</p>
+                      </div>
+                  </td>
+                  <td>NT$${inputCart.product.origin_price}</td>
+                  <td>${inputCart.quantity}</td>
+                  <td>NT$${inputCart.product.price}</td>
+                  <td class="discardBtn">
+                      <a href="#" class="material-icons" data-id="${inputCart.id}">
+                          clear
+                      </a>
+                  </td>
+              </tr>
+            `
+        })
+    }
     shoppingCartTableBody.innerHTML = cartListHtml;
     shoppingCartFinalTotal.textContent = `NT$${finalTotal}`;
+
     /* 7-1 */
-    if (!cartList.length) {
+    if (!inputCartList.length) {
         orderInfoBtn.disabled = true;  // 禁用
-        console.log("購物車裡沒有東西無法送出");
     } else {
         orderInfoBtn.disabled = false; // 啟用
     }
@@ -283,6 +292,11 @@ orderInfoBtn.addEventListener("click", function (event) {
         customerAddress.nextElementSibling.style.display = "block";
         isEmpty = true;
     }
+    if(!cartList){
+        Swal.fire("注意", "購物車是空的", "warning");
+        isEmpty = true;
+    }
+
     if (isEmpty === false) {
         const orderFormData = {
             "data": {
@@ -295,8 +309,8 @@ orderInfoBtn.addEventListener("click", function (event) {
                 }
             }
         }
-        console.log("成功送出表單資料");
         createOrder(orderFormData);
+        console.log("成功送出表單資料");
     }
 })
 
@@ -331,14 +345,14 @@ const loadingTitle = document.querySelector(".loadingTitle");
 
 /* 執行遮罩 */
 function showLoading(text = "載入中...") {
-  setLoadingText(text); // 這裡一定會有字，所以直接設定
-  loadingCover.classList.remove("hidden");
+    setLoadingText(text); // 這裡一定會有字，所以直接設定
+    loadingCover.classList.remove("hidden");
 }
 /* 結束遮罩 */
 function hideLoading() {
-  loadingCover.classList.add("hidden");
+    loadingCover.classList.add("hidden");
 }
 /* 賦值 */
 function setLoadingText(text) {
-  loadingTitle.textContent = text;
+    loadingTitle.textContent = text;
 }
