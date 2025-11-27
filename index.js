@@ -139,6 +139,8 @@ getCartList();
 /* 4-2渲染購物車列表 */
 const shoppingCartTableBody = document.querySelector(".shoppingCart-table tbody");
 const shoppingCartFinalTotal = document.querySelector(".total");
+const orderInfoCartMsg = document.querySelector(".orderInfo-cartMsg");
+
 function renderShoppingCart(inputCartList) {
     let cartListHtml = "";
     if (!inputCartList.length) {
@@ -148,7 +150,8 @@ function renderShoppingCart(inputCartList) {
                 購物車內沒有東西
             </td>
         </tr>
-        `
+        `;
+        orderInfoCartMsg.style.display = "block";
     } else {
         inputCartList.forEach(function (inputCart) {
             cartListHtml += `
@@ -168,7 +171,8 @@ function renderShoppingCart(inputCartList) {
                       </a>
                   </td>
               </tr>
-            `
+            `;
+            orderInfoCartMsg.style.display = "none";
         })
     }
     shoppingCartTableBody.innerHTML = cartListHtml;
@@ -177,8 +181,12 @@ function renderShoppingCart(inputCartList) {
     /* 7-1 */
     if (!inputCartList.length) {
         orderInfoBtn.disabled = true;  // 禁用
+        discardAllBtn.disabled = true;  // 禁用
+        
     } else {
         orderInfoBtn.disabled = false; // 啟用
+        discardAllBtn.disabled = false; // 啟用
+        
     }
 
 }
@@ -218,7 +226,6 @@ function deleteCartItem(inputCartID) {
 /* 6-2執行刪除全部ＡＰＩ */
 const discardAllBtn = document.querySelector(".discardAllBtn");
 discardAllBtn.addEventListener("click", function (event) {
-    event.preventDefault();
     showLoading("刪除購物車");
     axios
         .delete(`${apiUrl}/${apiPath}/carts`)
@@ -293,7 +300,6 @@ orderInfoBtn.addEventListener("click", function (event) {
         isEmpty = true;
     }
     if(!cartList){
-        Swal.fire("注意", "購物車是空的", "warning");
         isEmpty = true;
     }
 

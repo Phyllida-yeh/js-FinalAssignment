@@ -141,6 +141,11 @@ table {
   -webkit-transition: all .2s;
   transition: all .2s;
 }
+/* 刪除按鈕從a改成input後字重不一致*/
+button
+ {
+    font-weight: inherit;   /* 跟隨外層的大小 */
+}
 
 html,
 body {
@@ -848,13 +853,21 @@ body {
   background-color: #301E5F;
 }
 
-.orderInfo-btn:disabled {
+.orderInfo-btn:disabled,
+.discardAllBtn:disabled
+ {
   /* 1. 讓背景變灰，看起來不能按 */
   background-color: #ccc;
   /* 2. 讓文字變淺一點 */
   color: #888;
   /* 5. 移除邊框 (視需求) */
   border: none;
+}
+
+.orderInfo-cartMsg{
+  text-align: center;
+  font-size:smaller;
+  color: #888;
 }
 
 .orderPage-list {
