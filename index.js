@@ -91,11 +91,12 @@ function addCart(productId) {
     axios
         .post(`${apiUrl}/${apiPath}/carts`, data)
         .then(function (response) {
-            /* ？ */
-            // newCartList=response.data.carts;
-            // finalTotal=response.data.finalTotal;
+
+            cartList=response.data.carts;
+            finalTotal=response.data.finalTotal;
             hideLoading();
-            getCartList();
+            renderShoppingCart(cartList)
+            // getCartList();
             // console.log("加入購物車成功");
             // console.log("加入購物車成功", response.data);
 
@@ -214,7 +215,10 @@ function deleteCartItem(inputCartID) {
             // console.log("刪除購物車內特定產品成功")
             // console.log("刪除購物車內特定產品成功", response.data)
             hideLoading();
-            getCartList();
+            // getCartList();
+            cartList = response.data.carts;
+            finalTotal = response.data.finalTotal;
+            renderShoppingCart(cartList);
         })
         .catch(function (error) {
             hideLoading();
@@ -233,7 +237,10 @@ discardAllBtn.addEventListener("click", function (event) {
             // console.log("清除購物車內全部品成功");
             // console.log("清除購物車內全部品成功", response.data);
             hideLoading();
-            getCartList();
+            // getCartList();
+            cartList = response.data.carts;       // = []
+            finalTotal = response.data.finalTotal; // = 0
+            renderShoppingCart(cartList);
         })
         .catch(function (error) {
             hideLoading();
