@@ -39,8 +39,8 @@ function renderProducts(inputProductList) {
             <img src="${inputProduct.images}"alt="">
             <a href="#" class="addCardBtn" data-id=${inputProduct.id}>加入購物車</a>
             <h3>${inputProduct.title}</h3>
-            <del class="originPrice">NT${inputProduct.price}</del>
-            <p class="nowPrice">NT$${inputProduct.origin_price}</p>
+            <del class="originPrice">NT${inputProduct.origin_price}</del>
+            <p class="nowPrice">NT$${inputProduct.price}</p>
         </li>`
     })
     productWrap.innerHTML = productListHtml;
