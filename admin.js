@@ -133,3 +133,69 @@ function deleteAllOrder() {
 }
 /* 2-2如果沒有訂單就不送出刪除請求（1-1） */
 /* 2-3刪除個別訂單 */
+
+
+
+
+
+
+
+
+
+
+// var people = [
+//   {
+//     name: "卡斯伯",
+//     order: "鍋燒意麵",
+//     price: 80
+//   },
+//   {
+//     name: "小明",
+//     order: "牛肉麵",
+//     price: 120
+//   },
+//   {
+//     name: "漂亮阿姨",
+//     order: "滷味切盤",
+//     price: 40
+//   },
+//   {
+//     name: "Ray",
+//     order: "大麻醬乾麵",
+//     price: 60
+//   }
+// ];
+
+// console.log("before");
+// console.log(people);
+
+// var newOrders = [];
+// people.forEach(function(obj, index){
+//     newOrders[index] = obj;
+
+//     newOrders[index] = {
+//         name: obj.name,
+//         order: obj.order,
+//         price: obj.price,
+//         newPrice: obj.price * 0.8
+//     };
+
+//     newOrders[index] = {
+//         ...obj,
+//         newPrice: obj.price * 0.8
+//     };
+// });
+
+// console.log("newOrder");
+// console.log(newOrders);
+
+
+// console.log("after");
+// console.log(people);
+
+
+
+
+
+// var testObjA = Object.assign({}, people[0]);
+// var testObjB = Object.assign({anotherProperty: 123}, people[0]);
